@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"demoproc.h": "c",
+			"demoactions.h": "c",
+			"trigger_flags.h": "c",
+			"main.h": "c",
+			"u8x8.h": "c"
+		}
+	}
+}

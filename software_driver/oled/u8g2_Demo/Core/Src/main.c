@@ -23,6 +23,12 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "OLED.h"
+
+#include "stdio.h"
+#include "u8g2.h"
+#include "u8x8.h"
+
 
 /* USER CODE END Includes */
 
@@ -64,7 +70,9 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+	u8g2_t u8g2;
+	int nTemp;
+	char cStr[3];
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -86,23 +94,26 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
-	OLED_Init();
-	
+	//OLED_Init();
+	u8g2Init(&u8g2);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		OLED_ShowStr(10,10,"hello,oled!",1);
-		HAL_Delay(1000);
-		OLED_CLS();
-		OLED_ShowCN(0,0,0);
-		OLED_ShowCN(30,0,1);
-		OLED_ShowCN(60,0,2);
-		OLED_ShowCN(90,0,3);
-		HAL_Delay(1000);
-		OLED_CLS();
+			u8g2_DrawUTF8(&u8g2,0,10,"");//输出固定不变的字符串Data：
+			sprintf(cStr,"%d",nTemp);//将角度数据格式化输出到字符串
+			u8g2_DrawStr(&u8g2,50,10,cStr);//输出实时变化的角度数据
+		
+		  if(++nTemp>=20) nTemp=1;
+      u8g2_DrawCircle(&u8g2,96,40,nTemp,U8G2_DRAW_ALL);//画圆
+			u8g2_DrawXBMP(&u8g2,0,24,16,16,F16x16);
+      u8g2_SendBuffer(&u8g2);//绘制缓冲区的内容
+			u8g2_ClearBuffer(&u8g2);
+
+			HAL_Delay(50);
+//		OLED_CLS();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
